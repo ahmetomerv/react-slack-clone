@@ -1,3 +1,5 @@
+Based on original project and tutorial by [Reed Barger](https://www.udemy.com/course/build-a-slack-chat-app-with-react-redux-and-firebase/).
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
