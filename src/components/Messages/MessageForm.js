@@ -49,7 +49,7 @@ class MessageForm extends React.Component {
         if (fileUrl !== null) {
             newMessage['image'] = fileUrl;
         } else {
-            newMessage['content'] = this.state.message;
+            newMessage['content'] = message;
         }
 
         return newMessage;
