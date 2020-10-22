@@ -13,8 +13,10 @@ class Messages extends React.Component {
         channel: this.props.currentChannel,
         isPrivateChannel: this.props.isPrivateChannel,
         user: this.props.currentUser,
+        usersRef: firebase.database().ref('users'),
         messages: [],
         messagesLoading: false,
+        isChannelStarred: false,
         progressBar: false,
         numUniqueUsers: '',
         searchTerm: '',
@@ -27,6 +29,7 @@ class Messages extends React.Component {
 
         if (channel && user) {
             this.addListeners(channel.id);
+            this.addUsersStarListener(channel.id, user.uid);
         }
     }
 
@@ -50,6 +53,40 @@ class Messages extends React.Component {
         setTimeout(() => this.setState({ searchLoading: false }), 1000);
     }
 
+    handleStar = () => {
+        this.setState(prevState => ({
+            isChannelStarred: !prevState.isChannelStarred,
+        }), () => {
+            this.starChannel();
+        });
+    }
+
+    starChannel = () => {
+        if (this.state.isChannelStarred) {
+            this.state.usersRef
+                .child(`${this.state.user.uid}/starred`)
+                .update({
+                    [this.state.channel.id]: {
+                        name: this.state.channel.name,
+                        details: this.state.channel.details,
+                        createdBy: {
+                            name: this.state.channel.createdBy.name,
+                            avatar: this.state.channel.createdBy.avatar,
+                        }
+                    }
+                })
+        } else {
+            this.state.usersRef
+                .child(`${this.state.user.uid}/starred`)
+                .child(this.state.channel.id)
+                .remove((err) => {
+                    if (err !== null) {
+                        console.log(err);
+                    }
+                });
+        }
+    }
+
     addListeners = (channelId) => {
         this.addMessageListener(channelId);
     }
@@ -66,6 +103,20 @@ class Messages extends React.Component {
             });
             this.countUniqueUsers(loadedMessages);
         });
+    }
+
+    addUsersStarListener = (channelId, userId) => {
+        this.state.usersRef
+            .child(userId)
+            .child('starred')
+            .once('value')
+            .then((data) => {
+                if (data.val() !== null) {
+                    const channelIds = Object.keys(data.val());
+                    const prevStarred = channelIds.includes(channelId);
+                    this.setState({ isChannelStarred: prevStarred });
+                }
+            })
     }
 
     getMessagesRef = () => {
@@ -117,6 +168,7 @@ class Messages extends React.Component {
             searchResults,
             searchLoading,
             isPrivateChannel,
+            isChannelStarred,
         } = this.state;
 
         return (
@@ -127,6 +179,8 @@ class Messages extends React.Component {
                     numUniqueUsers={numUniqueUsers}
                     channelName={this.displayChannelName(channel)}
                     isPrivateChannel={isPrivateChannel}
+                    isChannelStarred={isChannelStarred}
+                    handleStar={this.handleStar}
                 />
 
                 <Segment>

@@ -189,7 +189,7 @@ class Channels extends React.Component {
                 <Menu.Menu className="menu" >
                     <Menu.Item>
                         <span>
-                            <Icon name="exchange" /> Channels
+                            <Icon name="exchange" /> CHANNELS
                         </span>
                         {' '} ({ channels.length }) <Icon name="add" onClick={this.openModal} />
                     </Menu.Item>
@@ -231,4 +231,4 @@ class Channels extends React.Component {
     }
 }
 
-export default connect(null, { setCurrentChannel, setPrivateChannel } )(Channels);
+export default connect(null, { setCurrentChannel, setPrivateChannel })(Channels);
