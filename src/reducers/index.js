@@ -6,6 +6,12 @@ const initialUserState = {
     isLoading: true,
 }
 
+const initialChannelState = {
+    currentChannel: null,
+    isPrivateChannel: false,
+    userPosts: null,
+}
+
 const user_reducer = (state = initialUserState, action) => {
     switch (action.type) {
         case actionTypes.SET_USER:
@@ -24,10 +30,6 @@ const user_reducer = (state = initialUserState, action) => {
     }
 }
 
-const initialChannelState = {
-    currentChannel: null,
-    isPrivateChannel: false,
-}
 
 const channel_reducer = (state = initialChannelState, action) => {
     switch(action.type) {
@@ -40,6 +42,11 @@ const channel_reducer = (state = initialChannelState, action) => {
             return {
                 ...state,
                 isPrivateChannel: action.payload.isPrivateChannel,
+            }
+        case actionTypes.SET_USER_POSTS:
+            return {
+                ...state,
+                userPosts: action.payload.userPosts,
             }
         default:
             return state;
