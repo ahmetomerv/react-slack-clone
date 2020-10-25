@@ -41,3 +41,26 @@ body,
 .progress__bar {
     margin: 0.3em 0 0 0 !important;
 }
+
+.color__container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 3px;
+    width: 35px;
+    cursor: pointer;
+}
+
+.color__container:hover {
+    opacity: .8;
+}
+
+.color__square {
+    width: 35px;
+    height: 35px;
+}
+
+.color__overlay {
+    width: 85px;
+    height: 35px;
+    transform: rotate(225deg);
+}
